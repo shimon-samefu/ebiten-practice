@@ -39,32 +39,10 @@ type TitleScene struct {
 	count int
 }
 
-func anyGamepadVirtualButtonJustPressed(i *Input) bool {
-	if !i.gamepadConfig.IsGamepadIDInitialized() {
-		return false
-	}
-
-	for _, b := range virtualGamepadButtons {
-		if i.gamepadConfig.IsButtonJustPressed(b) {
-			return true
-		}
-	}
-	return false
-}
-
 func (s *TitleScene) Update(state *GameState) error {
 	s.count++
 	if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
 		state.SceneManager.GoTo(NewGameScene())
-		return nil
-	}
-
-	if anyGamepadVirtualButtonJustPressed(state.Input) {
-		state.SceneManager.GoTo(NewGameScene())
-		return nil
-	}
-
-	if state.Input.gamepadConfig.IsGamepadIDInitialized() {
 		return nil
 	}
 
@@ -73,12 +51,6 @@ func (s *TitleScene) Update(state *GameState) error {
 	id := state.Input.GamepadIDButtonPressed()
 	if id < 0 {
 		return nil
-	}
-	state.Input.gamepadConfig.SetGamepadID(id)
-	if state.Input.gamepadConfig.NeedsConfiguration() {
-		g := &GamepadScene{}
-		g.gamepadID = id
-		state.SceneManager.GoTo(g)
 	}
 	return nil
 }

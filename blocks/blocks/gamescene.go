@@ -258,8 +258,7 @@ func (s *GameScene) Update(state *GameState) error {
 	s.field.Update()
 
 	if s.gameover {
-		if inpututil.IsKeyJustPressed(ebiten.KeySpace) ||
-			anyGamepadVirtualButtonJustPressed(state.Input) {
+		if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
 			state.SceneManager.GoTo(&TitleScene{})
 		}
 		return nil
